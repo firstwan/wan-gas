@@ -39,13 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party
-
+    'rest_framework',
+    
     # Own
-    'customers',
-    'payments',
-    'products',
-    'orders',
-    'shops',
+    'apps.customers',
+    'apps.payments',
+    'apps.products',
+    'apps.orders',
+    'apps.shops'
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,11 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Django Rest
+# Default API pagination
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
