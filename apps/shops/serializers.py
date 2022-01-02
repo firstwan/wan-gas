@@ -7,5 +7,6 @@ class ShopSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Shop
-        fields = ['id', 'name', 'address1', 'address_postcode', 'address_city', 'address_state', 'owner_id', 'owner']
-        read_only_fields = ['address2', 'nickname']
+        fields = ['name', 'address1', 'address_postcode', 'address_city', 'address_state', 'owner_id', 'owner']
+        read_only_fields = ['id','address2', 'nickname']
+        extra_kwargs = {'owner_id': {'write_only': True}}

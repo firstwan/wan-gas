@@ -7,9 +7,9 @@ class Order(models.Model):
     promotion_discount_amount = models.DecimalField(max_digits=18, decimal_places=4)
     net_price = models.DecimalField(max_digits=18, decimal_places=4)
     created_by = models.CharField(max_length=250)
-    created_date = models.DateTimeField()
+    created_date = models.DateTimeField(auto_now_add=True)
     buyer = models.ForeignKey(to='customers.Customer', on_delete=models.PROTECT, related_name='orders')
-    payment_transaction = models.ForeignKey(to='payments.Payment', on_delete=models.PROTECT, related_name='orders')
+    payment_transaction = models.ForeignKey(to='payments.Payment', on_delete=models.PROTECT, related_name='orders', null=True)
 
 
     class Meta:
@@ -19,7 +19,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     product = models.ForeignKey(to='products.Product', on_delete=models.PROTECT, related_name='order_items')
     product_name = models.CharField(max_length=250)
-    qty = models.IntegerField()
+    quantity = models.IntegerField()
     product_base_price = models.DecimalField(max_digits=18, decimal_places=4)
     discount_amount = models.DecimalField(max_digits=18, decimal_places=4)
     actual_price = models.DecimalField(max_digits=18, decimal_places=4)
