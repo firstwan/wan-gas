@@ -17,17 +17,25 @@ from django.contrib import admin
 from django.db import router
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from apps.orders.url_path import router as orders_router
 from apps.payments.url_path import router as payments_router
+from apps.products.url_path import router as products_router
 
 router = DefaultRouter()
 router.registry.extend(orders_router.registry)
 router.registry.extend(payments_router.registry)
+router.registry.extend(products_router.registry)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/', include(router.urls)),
-    path('api/v1/products/', include('apps.products.url_path')),
     path('api/v1/customers/', include('apps.customers.url_path')),
     path('api/v1/shops/', include('apps.shops.url_path'))
 ]

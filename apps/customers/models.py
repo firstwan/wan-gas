@@ -1,10 +1,15 @@
 from django.db import models
+import uuid
+
 
 # Create your models here.
 class Customer(models.Model):
-    unique_id = models.UUIDField()
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_by = models.CharField(max_length=250)
+    updated_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = "customer"

@@ -1,13 +1,19 @@
-from django.shortcuts import render
-from rest_framework import mixins, generics
-from rest_framework.views import APIView
+from rest_framework import mixins, generics, permissions
+from rest_framework.filters import SearchFilter
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Shop
 from .serializers import ShopSerializer
 
 # Create your views here.
-class ShopList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class ShopList( mixins.ListModelMixin, 
+                mixins.CreateModelMixin, 
+                generics.GenericAPIView):
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [SearchFilter]
+    search_fields = ['name', 'nickname']
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -21,6 +27,8 @@ class ShopDetail(mixins.RetrieveModelMixin,
                  generics.GenericAPIView):
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
