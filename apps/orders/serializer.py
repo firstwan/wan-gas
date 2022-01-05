@@ -1,39 +1,33 @@
 from rest_framework import serializers
 from .models import Order, OrderItem
 
-class OrderListingField(serializers.RelatedField):
-    def to_representation(self, value):
-        return {
-            'product_id': value.product_id,
-            'product_name': value.product_name,
-            'quantity': value.quantity,
-            'product_base_price': value.product_base_price,
-            'discount_amount': value.discount_amount,
-            'actual_price': value.actual_price
-        }
+class OrderItemSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = ['product_id', 'product_name', 'quantity', 'product_base_price', 'discount_amount', 'actual_price']
+        read_only_fields = ['product_name', 'product_base_price', 'discount_amount', 'actual_price']
+
 
 class OrderSerializer(serializers.ModelSerializer):
+    shop_id = serializers.IntegerField(write_only=True)
     buyer = serializers.ReadOnlyField(source='buyer.first_name')
     payment_transaction = serializers.ReadOnlyField(source='payment_transaction.transaction_id')
-    order_items = OrderListingField(many=True, read_only = True)
+    order_items = OrderItemSerializer(many=True, required=True)
 
-    product_id = serializers.CharField(max_length=100)
     # order_items = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     # payment_transaction = serializers.PrimaryKeyRelatedField(queryset=Snippet.objects.all())
 
+    # Magic binding to order items
+    def validate_order_items(self, attrs):
+        if len(attrs) == 0:
+            raise serializers.ValidationError('Required at least one order item.')
+        return attrs
+
     class Meta:
         model = Order
-        fields = ['transaction_id', 'before_discount_price', 'promotion_discount_amount', 
+        fields = ['shop_id', 'transaction_id', 'before_discount_price', 'promotion_discount_amount', 
                   'net_price', 'created_by', 'created_date', 'order_items', 'buyer', 'payment_transaction']
         read_only_fields = ['transaction_id', 'before_discount_price', 'promotion_discount_amount', 
-                            'net_price', 'created_by', 'created_date']
-        extra_kwargs = {'buyer_id': {'write_only': True},
-                        'product_id': {'write_only': True}}
-
-
-class OrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderItem
-        fields = ['product_id', 'product_name', 'quantity', 'product_base_price', 'discount_amount']
-        read_only_fields = ['actual_price']
-        extra_kwargs = {'product_id': {'write_only': True}}
+                            'net_price', 'created_by', 'created_date', 'buyer', 'payment_transaction']

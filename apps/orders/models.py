@@ -8,7 +8,7 @@ class Order(models.Model):
     net_price = models.DecimalField(max_digits=18, decimal_places=4)
     created_by = models.CharField(max_length=250)
     created_date = models.DateTimeField(auto_now_add=True)
-    buyer = models.ForeignKey(to='customers.Customer', on_delete=models.PROTECT, related_name='orders')
+    shop = models.ForeignKey(to='shops.Shop', on_delete=models.PROTECT, related_name='orders')
     payment_transaction = models.ForeignKey(to='payments.Payment', on_delete=models.PROTECT, related_name='orders', null=True)
 
 

@@ -14,5 +14,4 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        print(self.request)
         serializer.save(created_by=self.request.user, updated_by=self.request.user)
