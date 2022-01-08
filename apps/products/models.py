@@ -21,12 +21,9 @@ class ProductHistory(models.Model):
         RESTOCK = 1
         SELL = 2
         MANUAL_ADJUST = 3
-        
-        def __str__(self):
-            return str(self.label)
 
     history_type_id = models.IntegerField(choices=ProductHistoryType.choices)
-    history_type_name = models.CharField(max_length=50, choices=ProductHistoryType.choices)
+    history_type_name = models.CharField(max_length=50)
     qty = models.IntegerField()
     remark = models.CharField(max_length=250)
     created_by = models.CharField(max_length=250)

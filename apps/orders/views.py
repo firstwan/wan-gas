@@ -13,8 +13,8 @@ class OrderViewset(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     authentication_classes = [JWTAuthentication]
-    filter_backends = [SearchFilter]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [SearchFilter]
     search_fields = ['transaction_id']
     http_method_names = [ method 
                           for method in viewsets.ModelViewSet.http_method_names 

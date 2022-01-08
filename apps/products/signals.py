@@ -13,7 +13,7 @@ def finish_order(sender, **kwargs):
     # Insert product history record
     ProductHistory.objects.create(
         history_type_id = ProductHistory.ProductHistoryType.SELL,
-        history_type_name = ProductHistory.ProductHistoryType.SELL,
+        history_type_name = ProductHistory.ProductHistoryType.SELL.label,
         qty = obj.quantity,
         remark = f'Sell with order {obj.order.transaction_id}',
         created_by = 'order Item - finish_order signal',
