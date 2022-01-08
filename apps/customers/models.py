@@ -18,6 +18,9 @@ class Contact(models.Model):
     class ContactType(models.IntegerChoices):
         MOBILE_NUMBER = 1
         EMAIL = 2
+
+        def __str__(self):
+            return str(self.label)
     
     contact_type_id = models.IntegerField(choices=ContactType.choices)
     contact_type_name = models.CharField(max_length=50)

@@ -2,7 +2,17 @@ from django.db import models
 
 # Create your models here.
 class Order(models.Model):
+    class OrderStatus(models.IntegerChoices):
+        CREATED = 1,
+        PENDING_PAYMENT = 2,
+        COMPLETE = 3
+
+        def __str__(self):
+            return str(self.label)
+
     transaction_id = models.CharField(max_length=100)
+    order_status_id = models.IntegerField(choices=OrderStatus.choices, default=OrderStatus.CREATED)
+    order_status_name = models.CharField(max_length=50, choices=OrderStatus.choices, default=OrderStatus.CREATED)
     before_discount_price = models.DecimalField(max_digits=18, decimal_places=4)
     promotion_discount_amount = models.DecimalField(max_digits=18, decimal_places=4)
     net_price = models.DecimalField(max_digits=18, decimal_places=4)
