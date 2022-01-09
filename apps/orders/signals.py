@@ -11,6 +11,6 @@ def payment_created(sender, instance, created, **kwargs):
 
         if instance.payment_status_id == int(Payment.PaymentStatus.COMPLETE):
             order.order_status_id = Order.OrderStatus.COMPLETE
-            order.order_status_name = Order.OrderStatus.COMPLETE
+            order.order_status_name = Order.OrderStatus.COMPLETE.label
 
         order.save()

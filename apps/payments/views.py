@@ -1,10 +1,21 @@
 import uuid
 from datetime import datetime
+from django_filters import rest_framework as filters
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Payment
 from .serializers import PaymentSerializer
+
+
+# Filter
+class PaymentFitler(filters.FilterSet):
+    created_start_date = filters.DateTimeFilter(field_name="created_date", lookup_expr='gte')
+    created_end_date = filters.DateTimeFilter(field_name="created_date", lookup_expr='lte')
+
+    class Meta:
+        model = Payment
+        fields = ['transaction_id', 'payer_id']
 
 # Create your views here.
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -12,6 +23,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [filters.DjangoFilterBackend,]
+    filterset_class = PaymentFitler
+
+    def get_queryset(self):
+
+        return super().get_queryset()
 
     def create(self, request, *args, **kwargs):
         same_referent_id_payment = Payment.objects.filter(action_reference_id = self.request.data['action_reference_id'])
