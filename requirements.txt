@@ -5,3 +5,4 @@ djangorestframework-simplejwt
 django-filter
 django-environ
 django-heroku
+gunicorn
