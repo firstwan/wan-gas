@@ -10,6 +10,7 @@ djangorestframework-simplejwt = "*"
 django-filter = "*"
 django-environ = "*"
 psycopg2 = "*"
+django-heroku = "*"
 
 [dev-packages]
 
