@@ -8,6 +8,8 @@ django = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 django-filter = "*"
+django-environ = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
