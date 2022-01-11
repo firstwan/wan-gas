@@ -16,6 +16,6 @@ class ProductViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user, updated_by=self.request.user)
 
-    @action(detail=True)
-    def customPath(self, request, *args, **kwargs):
-        return Response("custom api path")
+    # @action(methods='post', detail=False, url_path='favorite_posts/(?P<user_id>\d+)')
+    # def customPath(self, request, *args, **kwargs):
+    #     return Response("custom api path")

@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import environ
+
+root = environ.Path(__file__) - 3  # get root of the project
+env = environ.Env()
+environ.Env.read_env()  # reading .env file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^hsq3hf#6ks$9s#8yf05h9w_uy&&*j8r14aovz1%l-@d)s1-)8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG_ENV', default=False)
 
 ALLOWED_HOSTS = []
 
@@ -93,11 +98,11 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testdb',
-        'USER': 'wan',
-        'PASSWORD': 'asdf1234',
-        'HOST':'localhost',
-        'PORT': '5432'
+        'NAME': env.str('DB_NAME', default='testdb'),
+        'USER': env.str('DB_USER_NAME'),
+        'PASSWORD': env.str('DB_PASSWORD'),
+        'HOST':env.str('DB_HOST', default='localhost'),
+        'PORT': env.str('DB_PORT', default='5432')
     }
 }
 
@@ -151,7 +156,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 
-     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
