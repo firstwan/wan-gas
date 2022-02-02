@@ -4,15 +4,18 @@ WORKDIR /app
 
 # install psycopg2 dependency
 RUN apt-get update
-# RUN apt-get -y install build-essential musl-dev
 RUN apt-get -y install gcc python-dev libpq-dev
+
+# Crete virtual env
+RUN python -m venv /src/venv
+ENV PATH="/src/venv/bin:$PATH"
 
 # install dependencies
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 
-FROM build
+FROM python:3.9-slim
 # set work dicrectory
 WORKDIR /app
 
@@ -29,6 +32,12 @@ ENV DB_USER_NAME=nwwafaemexmffu
 ENV DB_PASSWORD=0c2a08c2ed5b32eb952a88250efd55fe6c4ecabe2c9d7ae91e89073e3d5dd156
 ENV SECRET_KEY=django-insecure-dfngldsjfoq34jrk1l234jkrk2h34jkrn234jfkqaer34
 # ENV WEB_CONCURRENCY=3
+
+# Copy from build
+ENV PATH="/src/venv/bin:$PATH"
+COPY --from=build /src/venv /src/venv
+RUN apt-get update
+RUN apt-get -y install gcc python-dev libpq-dev
 
 # Copy project
 COPY . .
