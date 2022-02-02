@@ -1,0 +1,5 @@
+build:
+  docker:
+    web: Dockerfile.debian
+run:
+  web: gunicorn WanGasPos.wsgi:application --bind 0.0.0.0:$PORT

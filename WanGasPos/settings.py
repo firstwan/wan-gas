@@ -26,13 +26,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^hsq3hf#6ks$9s#8yf05h9w_uy&&*j8r14aovz1%l-@d)s1-)8'
+SECRET_KEY = env.str('SECRET_KEY', default='foo')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG_ENV', default=False)
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'users.User'
 
 # Application definition
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     
     # Own
+    'apps.users',
     'apps.customers',
     'apps.payments',
     'apps.products',

@@ -1,0 +1,41 @@
+# Official base image
+FROM python:3.9-slim as build
+WORKDIR /app
+
+# install psycopg2 dependency
+RUN apt-get update
+# RUN apt-get -y install build-essential musl-dev
+RUN apt-get -y install gcc python-dev libpq-dev
+
+# install dependencies
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
+
+
+FROM build
+# set work dicrectory
+WORKDIR /app
+
+# set environment variables
+# Prevents Python from writing pyc files to disc
+ENV PYTHONDONTWRITEBYTECODE=1 
+# Prevents Python from buffering stdout and stderr
+ENV PYTHONUNBUFFERED=1
+ENV DEBUG_ENV=False
+ENV DB_HOST=ec2-3-227-55-25.compute-1.amazonaws.com
+ENV DB_PORT=5432
+ENV DB_NAME=d2c8hqk1qq5kr5
+ENV DB_USER_NAME=nwwafaemexmffu
+ENV DB_PASSWORD=0c2a08c2ed5b32eb952a88250efd55fe6c4ecabe2c9d7ae91e89073e3d5dd156
+ENV SECRET_KEY=django-insecure-dfngldsjfoq34jrk1l234jkrk2h34jkrn234jfkqaer34
+# ENV WEB_CONCURRENCY=3
+
+# Copy project
+COPY . .
+
+# add and run as non-root user
+RUN adduser --disabled-password myuser
+USER myuser
+
+# run gunicorn
+CMD gunicorn WanGasPos.wsgi:application --bind 0.0.0.0:$PORT
