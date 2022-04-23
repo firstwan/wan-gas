@@ -18,6 +18,9 @@ class Shop(models.Model):
     updated_by = models.CharField(max_length=250)
     updated_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.nickname
+
     class Meta:
         db_table = "shop"
 

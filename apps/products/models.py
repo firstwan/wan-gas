@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.db import models
 from django.views.generic import base
 
@@ -12,6 +13,9 @@ class Product(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_by = models.CharField(max_length=250)
     updated_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = "product"

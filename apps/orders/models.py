@@ -12,12 +12,16 @@ class Order(models.Model):
     order_status_name = models.CharField(max_length=50, default=OrderStatus.CREATED.label)
     before_discount_price = models.DecimalField(max_digits=18, decimal_places=4)
     promotion_discount_amount = models.DecimalField(max_digits=18, decimal_places=4)
+    shipping_fee = models.DecimalField(max_digits=18, decimal_places=4, default=0)
     net_price = models.DecimalField(max_digits=18, decimal_places=4)
     created_by = models.CharField(max_length=250)
     created_date = models.DateTimeField(auto_now_add=True)
     shop = models.ForeignKey(to='shops.Shop', on_delete=models.PROTECT, related_name='orders')
-    payment_transaction = models.ForeignKey(to='payments.Payment', on_delete=models.PROTECT, related_name='orders', null=True)
+    # payment_transaction = models.ForeignKey(to='payments.Payment', on_delete=models.PROTECT, related_name='orders', null=True)
+    payment_transaction_id = models.CharField(max_length=250, null=True, blank=True)
 
+    def __str__(self):
+        return self.transaction_id
 
     class Meta:
         db_table = "order"

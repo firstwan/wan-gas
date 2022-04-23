@@ -30,6 +30,8 @@ class Payment(models.Model):
     payer = models.ForeignKey(to='customers.Customer', on_delete=models.PROTECT, related_name='payments')
     payment_method = models.ForeignKey(to=PaymentMethod, on_delete=models.PROTECT, related_name='payments')
 
-
+    def __str__(self):
+        return self.transaction_id
+        
     class Meta:
         db_table = "payment"
